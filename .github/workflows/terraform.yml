@@ -27,4 +27,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2  # Set your region here
 
-      - name: Change direct
+      - name: Change directory to Terraform folder (if necessary)
+        run: cd terraform  # Only if your Terraform files are in the "terraform" subfolder
+
+      - name: Terraform Init
+        run: terraform init  # Added `run` key for execution
+
+      - name: Terraform Plan
+        run: terraform plan  # Added `run` key for execution
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve  # Added `run` key for execution
