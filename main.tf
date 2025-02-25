@@ -11,12 +11,12 @@ provider "aws" {
   region = var.region
 }
 
-resource "aws_instance" "myserver" {
-    ami = "ami-00c257e12d6828491"
-    instance_type = "t2.micro"
+# resource "aws_instance" "myserver" {
+#     ami = "ami-00c257e12d6828491"
+#     instance_type = "t2.micro"
 
-    tags = {
-        Name = "MyWebServer"
-    }
+#     tags = {
+#         Name = "MyWebServer"
+#     }
   
-}
+# }
