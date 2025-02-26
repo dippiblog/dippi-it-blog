@@ -43,7 +43,9 @@ jobs:
         id: plan
         run: |
           terraform plan -out=tfplan
-          echo "PLAN_OUTPUT=$(terraform show -json tfplan)" >> $GITHUB_ENV
+          # Capture specific output values and set them as environment variables
+          PUBLIC_IP=$(terraform output -raw instance_public_ip)
+          echo "PUBLIC_IP=$PUBLIC_IP" >> $GITHUB_ENV
         working-directory: terraform/
 
       # Step 7: Terraform Apply
