@@ -1,6 +1,6 @@
 # DippiBlog - Blogging Platform & DevOps Practice
 
-Welcome to **DippiBlog**, a personal blog where I document my journey through software development, DevOps practices, and cloud infrastructure! This platform serves two primary purposes:
+Welcome to **DippiBlog**, a blog where I document my journey through software development, DevOps practices, and cloud infrastructure! This platform serves two primary purposes:
 
 1. **Blogging**: A space to share my thoughts, tutorials, and experiences on technology, coding, and DevOps practices.
 2. **DevOps Pipeline Practice**: A live example of how I set up and manage a CI/CD pipeline using **GitHub Actions**, **Terraform**, and **AWS**. This repo will showcase the automation and infrastructure as code (IaC) practices that I use to deploy and maintain the blog.
