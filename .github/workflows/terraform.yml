@@ -43,9 +43,9 @@ jobs:
         id: plan
         run: |
           terraform plan -out=tfplan
-          # Only extract the specific output value you're interested in
+          # Capture specific output value you're interested in
           PUBLIC_IP=$(terraform output -raw instance_public_ip)
-          echo "PUBLIC_IP=$PUBLIC_IP" >> $GITHUB_ENV
+          echo "PUBLIC_IP=$PUBLIC_IP" >> $GITHUB_ENV  # Set as environment variable for future steps
         working-directory: terraform/
 
       # Step 7: Terraform Apply
@@ -53,7 +53,11 @@ jobs:
         run: terraform apply -auto-approve tfplan
         working-directory: terraform/
 
-      # Step 8: Clean up Terraform resources (Destroy)
+      # Step 8: Save the state (If you need to pass values across jobs or steps)
+      - name: Save state (to use in other steps)
+        run: echo "PUBLIC_IP=${{ steps.plan.outputs.PUBLIC_IP }}" >> $GITHUB_STATE
+
+      # Step 9: Clean up Terraform resources (Destroy)
       - name: Terraform Destroy (Clean Up)
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: terraform destroy -auto-approve
