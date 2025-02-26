@@ -1,49 +1,49 @@
 name: Terraform Deploy to AWS
 
-# Trigger the workflow on push to the main branch, or via manual trigger (workflow_dispatch)
 on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch: 
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      # Step 2: Set up AWS CLI
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2  # Replace with your desired region
+          aws-region: us-west-2
 
-      # Step 3: Set up Terraform
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: '1.4.0'  # Specify the Terraform version you want to use
+          terraform_version: '1.4.0'
 
-      # Step 4: Initialize Terraform
+      # Change to the directory where Terraform files are located (if applicable)
+      - name: Change to Terraform directory
+        run: cd terraform/
+
       - name: Terraform Init
         run: terraform init
 
-      # Step 5: Plan Terraform deployment
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        id: plan
+        run: |
+          terraform plan -out=tfplan
+          # You can set environment variables here using GITHUB_ENV
+          echo "PLAN_OUTPUT=$(terraform show -json tfplan)" >> $GITHUB_ENV
 
-      # Step 6: Apply Terraform deployment
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
 
-      # Step 7: Clean up Terraform resources (Destroy)
-      # Here we add a conditional step based on an input parameter or manual trigger
+      # Conditionally clean up Terraform resources if triggered manually
       - name: Terraform Destroy (Clean Up)
-        if: ${{ github.event_name == 'workflow_dispatch' }} # This will only run when manually triggered
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: terraform destroy -auto-approve
