@@ -30,21 +30,21 @@ jobs:
       # Step 4: Initialize Terraform
       - name: Terraform Init
         run: terraform init
-        working-directory: /ec2  # Path to your Terraform files
+        working-directory: ec2  # Path to your Terraform files
 
       # Step 5: Plan Terraform
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ./ec2
+        working-directory: ec2
 
       # Step 6: Apply Terraform (deploy)
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: /ec2
+        working-directory: ec2
 
       # Step 7: Clean up Terraform resources (Destroy) only on manual trigger
       - name: Terraform Destroy (Clean Up)
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: terraform destroy -auto-approve
-        working-directory: ./ec2
+        working-directory: ec2
         # This will only run when manually triggered via workflow_dispatch
