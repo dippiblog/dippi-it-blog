@@ -48,10 +48,3 @@ jobs:
         run: terraform destroy -auto-approve
         working-directory: ec2
         # This will only run when manually triggered via workflow_dispatch
-
-            # Step 6: Apply Terraform (deploy)
-            
-     # Step 7: Clean up Terraform resources
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
-        working-directory: ec2
