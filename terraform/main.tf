@@ -1,3 +1,16 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.88.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.region
+}
+
 # EC2 instance For Nginx setup
 resource "aws_instance" "nginxserver" {
   ami                         = "ami-027951e78de46a00e"
