@@ -22,12 +22,13 @@ jobs:
             uses: hashicorp/setup-terraform@v1
             with: 
               terraform_version: 1.7.0
+              working-directory: terraform
           - name: Terraform Plan
             run: |
               terraform init -backend-config=envs/${{ matrix.environment }}.backend.conf
               terraform plan -var-file=envs/${{ matrix.environment }}.tfvars
 
-            working-directory: terraform
+            
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
