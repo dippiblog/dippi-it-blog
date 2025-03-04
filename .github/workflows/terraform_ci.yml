@@ -2,7 +2,7 @@ name: workflow_plan
 
 
 on:
-    pull_request:
+    push:
         branches:
             - dev
             - qa
