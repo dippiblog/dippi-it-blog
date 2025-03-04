@@ -1,35 +1,38 @@
 name: workflow_plan
 
-
 on:
-    push:
-        branches:
-            - dev
-            - qa
-            - main
+  push:
+    branches:
+      - dev
+      - qa
+      - main
 
 jobs:
-    all-workflow-terraform-plan:
-        strategy:
-            matrix:
-                environment: [dev, qa, prd]
-        name: Terraform Plan for ${{ matrix.environment }}
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v2
-          - name: Setup Terraform
-            uses: hashicorp/setup-terraform@v1
-            with: 
-              terraform_version: 1.7.0
-          - name: Terraform Plan
-            run: |
-              terraform plan -var-file=envs/${{ matrix.environment }}.tfvars
-              
+  all-workflow-terraform-plan:
+    strategy:
+      matrix:
+        environment: [dev, qa, prd]
+    name: Terraform Plan for ${{ matrix.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with: 
+          terraform_version: 1.7.0
 
-            
-        env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform  # Make sure this is the directory with your .tf files
+
+      - name: Terraform Plan
+        run: |
+          terraform plan -var-file=envs/${{ matrix.environment }}.tfvars
+        working-directory: ./terraform  # Same directory as your .tf files
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: "us-east-1"  # Set the AWS region if needed
